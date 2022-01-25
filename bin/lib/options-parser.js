@@ -542,7 +542,6 @@ const esbuildOptions = {
     tsconfig: 'tsconfig.json', // string
     tsconfigRaw: ``,
     absWorkingDir: process.cwd(), // string: a file-system path
-
     // Currently not used:
     // assetNames: 'assets/[name]-[hash]', 
     // require('esbuild').serve ...
@@ -579,6 +578,7 @@ const customOptions = {
     serve: true, // start the live-server
     project: '', // project name from the angular.json file
     mode: 'build', // angular.json architect->[mode], build|test|serve ...
+    nxRepo: false, // nx Repository true|false
 };
 
 const cleanOptions = (options = {}) => {

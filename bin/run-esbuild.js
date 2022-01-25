@@ -81,6 +81,8 @@ module.exports = class NgEsbuild {
 
     this.getAngularOptions();
 
+    console.log('el return funciono');
+
     this.initOutputDirectory();
 
     if (this.options.watch) {
@@ -93,8 +95,10 @@ module.exports = class NgEsbuild {
 
   async getAngularOptions() {
     if (!this.angularOptions) {
+      let jsonFile = this.options.nxRepo ? 'workspace.json' : 'angular.json';
+
       const angularSettings = await this.store.getCachedFile(
-        path.join(this.workDir, 'angular.json'),
+        path.join(this.workDir, jsonFile),
         'json'
       );
 
@@ -102,7 +106,10 @@ module.exports = class NgEsbuild {
         || Object.keys(angularSettings.projects)[0];
 
       const mode = this.options.mode || 'build';
-      this.angularOptions = angularSettings.projects[project].architect[mode].options;
+      this.angularOptions =
+          this.options.nxRepo ?
+              angularSettings.projects[project].targets[mode].options :
+              angularSettings.projects[project].architect[mode].options;
       // console.log('ANGULAROPTIONS: ', this.angularOptions);
 
       this.buildOptions.entryPoints = this.angularOptions.main
@@ -118,6 +125,7 @@ module.exports = class NgEsbuild {
   }
 
   async initOutputDirectory() {
+    console.log('initOutputDirectory', this.outDir);
     await fs.promises.rm(this.outDir, { recursive: true, force: true });
   }
 
