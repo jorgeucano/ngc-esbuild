@@ -81,8 +81,6 @@ module.exports = class NgEsbuild {
 
     this.getAngularOptions();
 
-    console.log('el return funciono');
-
     this.initOutputDirectory();
 
     if (this.options.watch) {
@@ -125,7 +123,6 @@ module.exports = class NgEsbuild {
   }
 
   async initOutputDirectory() {
-    console.log('initOutputDirectory', this.outDir);
     await fs.promises.rm(this.outDir, { recursive: true, force: true });
   }
 
@@ -202,7 +199,9 @@ module.exports = class NgEsbuild {
       );
     }
 
-    if (!this.lastUpdatedFileList.find(f => /.*angular\.json$/.test(f))) {
+    const toFind = this.options.nxRepo ? /.*workspace\.json$/ : /.*angular\.json$/;
+
+    if (!this.lastUpdatedFileList.find(f => toFind.test(f))) {
       this.dryRun = true;
     }
 
